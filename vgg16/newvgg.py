@@ -87,22 +87,35 @@ testHot_Y = to_categorical(test_Y, num_classes = 2)
 
 print("vgg16 executing " )
 def vgg_like(train_X, trainHot_Y, test_X, testHot_Y):
-    
-    input_shape = (50,50,3)
+
+    kernel_size = (3,3)
+    pool_size= (2,2)
+
     model = Sequential()
-    model.add(Conv2D(64, kernel_size=(3, 3),activation='relu',input_shape=input_shape,strides=2))
-    model.add(Conv2D(64, (3, 3), activation='relu'))
-    model.add(MaxPooling2D(pool_size=(2, 2)))
-    model.add(Conv2D(128, (3, 3), activation='relu'))
-    model.add(Conv2D(256, (3, 3), activation='relu'))
-    model.add(MaxPooling2D(pool_size=(2, 2)))
-    model.add(Dropout(0.5))
+    model.add(Conv2D(32, kernel_size, activation = 'relu', input_shape = (50, 50, 3)))
+    model.add(Conv2D(32, kernel_size, activation = 'relu'))
+    model.add(Conv2D(32, kernel_size, activation = 'relu'))
+    model.add(MaxPooling2D(pool_size = pool_size)) 
+    model.add(Dropout(0.3))
+
+    model.add(Conv2D(64, kernel_size, activation ='relu'))
+    model.add(Conv2D(64, kernel_size, activation ='relu'))
+    model.add(Conv2D(64, kernel_size, activation ='relu'))
+    model.add(MaxPooling2D(pool_size = pool_size))
+    model.add(Dropout(0.3))
+
+    model.add(Conv2D(128, kernel_size, activation ='relu'))
+    model.add(Conv2D(128, kernel_size, activation ='relu'))
+    model.add(Conv2D(128, kernel_size, activation ='relu'))
+    model.add(MaxPooling2D(pool_size = pool_size))
+    model.add(Dropout(0.3))
+
     model.add(Flatten())
-    model.add(Dense(512, activation='relu'))
+    model.add(Dense(256, activation = "relu"))
     model.add(Dropout(0.5))
-    model.add(Dense(2, activation='softmax'))
+    model.add(Dense(2, activation = "softmax"))
     
-    model.compile(loss=keras.losses.binary_crossentropy,optimizer=keras.optimizers.Adadelta(lr=1),metrics=['accuracy'])
+    model.compile(loss=keras.losses.bianry_crossentropy,optimizer=keras.optimizers.Adam(lr=0.0001),metrics=['accuracy'])
     
     es= EarlyStopping(monitor='val_loss', min_delta=0.05, patience=30, verbose=0, mode='auto')
     hist = model.fit(train_X,trainHot_Y, batch_size=64, epochs=50, callbacks = [es], validation_split =0.2)
@@ -117,7 +130,7 @@ def vgg_like(train_X, trainHot_Y, test_X, testHot_Y):
     plt.title('Test Accuracy = '+str(test_acc))
     plt.xlabel('Epoch')
     plt.legend(['Train', 'Validation'], loc='upper left')
-    plt.savefig("result/accuracy.png")
+    plt.savefig("result/accuracy2.png")
     plt.close()
 
     # Plot training & validation loss values
@@ -128,9 +141,9 @@ def vgg_like(train_X, trainHot_Y, test_X, testHot_Y):
     plt.ylabel('Loss')
     plt.xlabel('Epoch')
     plt.legend(['Train', 'Validation'], loc='upper left')
-    plt.savefig("result/loss.png")
+    plt.savefig("result/loss2.png")
 
     # Save model
-    model.save_weights('result/weights.h5')
+    model.save_weights('result1/weights.h5')
     return model
 vgg_like(train_X, trainHot_Y, test_X, testHot_Y)
