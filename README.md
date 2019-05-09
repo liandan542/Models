@@ -20,4 +20,6 @@ The result of training, validation and testing are images names "accuracy.png" a
   2. output weights of the model: 'newvgg_weights.h5'
 
 # AlexNet
-  Run alex_net.py
+```python
+python alex_net.py
+```
