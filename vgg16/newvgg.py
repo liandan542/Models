@@ -131,7 +131,7 @@ def vgg_like(train_X, trainHot_Y, test_X, testHot_Y):
     plt.title('Test Accuracy = '+str(test_acc))
     plt.xlabel('Epoch')
     plt.legend(['Train', 'Validation'], loc='upper left')
-    plt.savefig("result/accuracy.png")
+    plt.savefig("./accuracy.png")
     plt.close()
 
     # Plot training & validation loss values                                                                      
@@ -141,10 +141,10 @@ def vgg_like(train_X, trainHot_Y, test_X, testHot_Y):
     plt.ylabel('Loss')
     plt.xlabel('Epoch')
     plt.legend(['Train', 'Validation'], loc='upper left')
-    plt.savefig("result/loss.png")
+    plt.savefig("./loss.png")
 
     # Save model
-    model.save_weights('result/newvgg_weights.h5')
+    model.save_weights('./newvgg_weights.h5')
     return model
 
 vgg_like(train_X, trainHot_Y, test_X, testHot_Y)
