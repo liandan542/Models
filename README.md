@@ -5,7 +5,7 @@ The result of training, validation and testing are images names "accuracy.png" a
 
 # DenseNet
 1. Compile dense121_train.py.py 
-  read images at '/projectnb/cs542sp/idc_classification/data/'
+  read images at ```'/projectnb/cs542sp/idc_classification/data/'```
   process the Dataset and shuffle it, name as "balancedData_shuffled" then store it at "./balancedData_shuffled"
   Train the model and get the weights called "densenet_weights.h5".
 2. Compile dense121_pred.py
