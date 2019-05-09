@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 # neccesary libraries
 import tensorflow as tf
 import keras
@@ -108,42 +110,41 @@ def vgg_like(train_X, trainHot_Y, test_X, testHot_Y):
     model.add(Conv2D(128, kernel_size, activation ='relu'))
     model.add(Conv2D(128, kernel_size, activation ='relu'))
     model.add(MaxPooling2D(pool_size = pool_size))
-    model.add(Dropout(0.3))
+    model.add(Dropout(0.4))
 
     model.add(Flatten())
     model.add(Dense(256, activation = "relu"))
     model.add(Dropout(0.5))
     model.add(Dense(2, activation = "softmax"))
     
-    model.compile(loss=keras.losses.bianry_crossentropy,optimizer=keras.optimizers.Adam(lr=0.0001),metrics=['accuracy'])
+    model.compile(loss=keras.losses.binary_crossentropy,optimizer=keras.optimizers.Adam(lr=1e-4),metrics=['accuracy'])
     
     es= EarlyStopping(monitor='val_loss', min_delta=0.05, patience=30, verbose=0, mode='auto')
-    hist = model.fit(train_X,trainHot_Y, batch_size=64, epochs=50, callbacks = [es], validation_split =0.2)
+    hist = model.fit(train_X,trainHot_Y, batch_size=64, epochs=50, callbacks = [es], validation_split =0.3)
 
     test_loss,test_acc = model.evaluate(test_X, testHot_Y, batch_size=64)
-    
-#     print(hist.history)
-    plt.ylim(0.5, 1)
+
+#     print(hist.history)                                                                                        
     plt.plot(hist.history['acc'])
     plt.plot(hist.history['val_acc'])
     plt.title('Model accuracy')
     plt.title('Test Accuracy = '+str(test_acc))
     plt.xlabel('Epoch')
     plt.legend(['Train', 'Validation'], loc='upper left')
-    plt.savefig("result/accuracy2.png")
+    plt.savefig("result/accuracy.png")
     plt.close()
 
-    # Plot training & validation loss values
-    plt.ylim(0, 0.5)
+    # Plot training & validation loss values                                                                      
     plt.plot(hist.history['loss'])
     plt.plot(hist.history['val_loss'])
     plt.title('Test Loss = '+str(test_loss))
     plt.ylabel('Loss')
     plt.xlabel('Epoch')
     plt.legend(['Train', 'Validation'], loc='upper left')
-    plt.savefig("result/loss2.png")
+    plt.savefig("result/loss.png")
 
     # Save model
-    model.save_weights('result1/weights.h5')
+    model.save_weights('result/newvgg_weights.h5')
     return model
+
 vgg_like(train_X, trainHot_Y, test_X, testHot_Y)
